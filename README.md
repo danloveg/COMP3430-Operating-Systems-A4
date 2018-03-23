@@ -1,2 +1,6 @@
-# COMP3430-Operating-Systems-A4
-Memory Management and Persistent Storage in C
+# Memory Management and Persistent Storage in C
+### COMP3430 Winter 2018 Assignment 4
+
+## Overview
+
+## Running the Code
