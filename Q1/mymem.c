@@ -133,18 +133,26 @@ void myfree(void *addr, unsigned long sz) {
   if (prevNode!=NULL) {
     if (nextNode!=NULL) {
       // amalgmation with free nodes on either side
-      // INSERT YOUR CODE HERE
+      prevNode -> size = prevNode -> size + freeSz + nextNode -> size;
+      prevNode -> next = nextNode -> next;
+      free(prev);
+      free(nextNode);
     } else {
       // amalgamation with just preceding free node
-      // INSERT YOUR CODE HERE
+      prevNode -> size = prevNode -> size + freeSz;
     } // end if
   } else {
     if (nextNode!=NULL) {
       // amalgamation with just the following free node
-      // INSERT YOUR CODE HERE
+      prev -> size = prev -> size + freeSz + nextNode -> size;
+      prev -> next = nextNode -> next;
+      free(nextNode);
     } else {
       // no amalgamation - just insert into list at correct point
-      // INSERT YOUR CODE HERE
+      freeListNode * newNode = (freeListNode *) malloc(sizeof(freeListNode));
+      newNode -> next = NULL;
+      newNode -> size = freeSz;
+      prev -> next = newNode;
     } // end if
   } //end if
 } // end myfree
