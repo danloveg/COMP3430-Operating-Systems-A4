@@ -132,27 +132,39 @@ void myfree(void *addr, unsigned long sz) {
   //   neeeded
   if (prevNode!=NULL) {
     if (nextNode!=NULL) {
-      // amalgmation with free nodes on either side
+      // CASE 1: amalgmation with free nodes on either side
+      printf("Case 1\n");
       prevNode -> size = prevNode -> size + freeSz + nextNode -> size;
       prevNode -> next = nextNode -> next;
-      free(prev);
-      free(nextNode);
     } else {
-      // amalgamation with just preceding free node
+      // CASE 2: amalgamation with just preceding free node
+      printf("Case 2\n");
       prevNode -> size = prevNode -> size + freeSz;
     } // end if
   } else {
     if (nextNode!=NULL) {
-      // amalgamation with just the following free node
-      prev -> size = prev -> size + freeSz + nextNode -> size;
-      prev -> next = nextNode -> next;
-      free(nextNode);
+      // CASE 3: amalgamation with just the following free node
+      printf("Case 3\n");
+
     } else {
-      // no amalgamation - just insert into list at correct point
-      freeListNode * newNode = (freeListNode *) malloc(sizeof(freeListNode));
-      newNode -> next = NULL;
+      // CASE 4: no amalgamation - just insert into list at correct point
+
+      // our new node is at the address being freed
+      freeListNodePtr newNode = (freeListNodePtr) addr;
       newNode -> size = freeSz;
-      prev -> next = newNode;
+
+      if (newNode < prev) {
+        newNode -> next = prev;
+        // Assign new node to the head if necessary
+        if (prev == freeListHead) {
+          freeListHead = newNode;
+        } else {
+          prev = newNode;
+        }
+      } else {
+        newNode -> next = prev -> next;
+        prev -> next = newNode;
+      }
     } // end if
   } //end if
 } // end myfree
