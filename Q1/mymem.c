@@ -103,6 +103,7 @@ void myfree(void *addr, unsigned long sz) {
   freeListNodePtr   startAddr;
   freeListNodePtr   prevNode;
   freeListNodePtr   nextNode;
+  freeListNodePtr   newNode;
 
   // we always free an area at least as big as a free list structure
   freeSz=max(sz,MINALLOCSIZE);
@@ -115,6 +116,7 @@ void myfree(void *addr, unsigned long sz) {
   // and for a node with a start address 1 greated than addr+freeSz
   prevNode=NULL;
   nextNode=NULL;
+  newNode=NULL;
   prev=NULL;
   for (curr=freeListHead;((curr!=NULL)&&((prevNode==NULL)||
 					 (nextNode==NULL)));curr=curr->next) {
@@ -133,24 +135,24 @@ void myfree(void *addr, unsigned long sz) {
   if (prevNode!=NULL) {
     if (nextNode!=NULL) {
       // CASE 1: amalgmation with free nodes on either side
-      printf("Case 1\n");
       prevNode -> size = prevNode -> size + freeSz + nextNode -> size;
       prevNode -> next = nextNode -> next;
     } else {
       // CASE 2: amalgamation with just preceding free node
-      printf("Case 2\n");
       prevNode -> size = prevNode -> size + freeSz;
     } // end if
   } else {
     if (nextNode!=NULL) {
       // CASE 3: amalgamation with just the following free node
-      printf("Case 3\n");
-
+      newNode = (freeListNodePtr) addr;
+      newNode -> size = nextNode -> size + freeSz;
+      newNode -> next = nextNode -> next;
+      prev -> next = newNode;
     } else {
       // CASE 4: no amalgamation - just insert into list at correct point
 
       // our new node is at the address being freed
-      freeListNodePtr newNode = (freeListNodePtr) addr;
+      newNode = (freeListNodePtr) addr;
       newNode -> size = freeSz;
 
       if (newNode < prev) {
