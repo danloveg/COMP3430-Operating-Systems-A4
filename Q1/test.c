@@ -17,27 +17,74 @@ int main(int argc, char*argv[]) {
     myinit(65536);
 
     // Test contiguous allocating and freeing of memory
-    printf("Testing contiguous allocation and deallocation...\n");
+    printf("Testing without any need for amalgamation...\n");
     chunk1 = mymalloc(64);
-    assert(chunk1 != NULL && "mymalloc returned NULL pointer");
+    assert(chunk1 != NULL && "FAIL: mymalloc returned NULL pointer");
     chunk2 = mymalloc(64);
-    assert(chunk1 != NULL && "mymalloc returned NULL pointer");
+    assert(chunk2 != NULL && "FAIL: mymalloc returned NULL pointer");
     chunk3 = mymalloc(64);
-    assert(chunk1 != NULL && "mymalloc returned NULL pointer");
+    assert(chunk3 != NULL && "FAIL: mymalloc returned NULL pointer");
     chunk4 = mymalloc(64);
-    assert(chunk1 != NULL && "mymalloc returned NULL pointer");
-    numNodes = numNodesOnFreeList();
-    assert(numNodes == 1 && "Number of nodes is not 1");
+    assert(chunk4 != NULL && "FAIL: mymalloc returned NULL pointer");
 
     myfree(chunk1, 64);
     myfree(chunk2, 64);
     myfree(chunk3, 64);
     myfree(chunk4, 64);
+    numNodes = numNodesOnFreeList();
+    assert(numNodes == 1 && "FAIL: Number of nodes is not 1");
 
     printf("PASS\n");
 
 
-    // Test freeing in reverse order
-    printf("\nTesting freeing in reverse order...\n");
+    // Test amalgamating from in front only
+    printf("\nTesting amalgamating from the front...\n");
+    chunk1 = mymalloc(64);
+    assert(chunk1 != NULL && "FAIL: mymalloc returned NULL pointer");
+    chunk2 = mymalloc(64);
+    assert(chunk2 != NULL && "FAIL: mymalloc returned NULL pointer");
+    chunk3 = mymalloc(64);
+    assert(chunk3 != NULL && "FAIL: mymalloc returned NULL pointer");
 
+    myfree(chunk3, 64);
+    myfree(chunk2, 64);
+    myfree(chunk1, 64);
+    numNodes = numNodesOnFreeList();
+    assert(numNodes == 1 && "FAIL: Number of nodes is not 1");
+
+    printf("PASS\n");
+
+
+    // Test amalgamating from both sides
+    printf("\nTesting amalgamating from both sides...\n");
+    chunk1 = mymalloc(64);
+    assert(chunk1 != NULL && "FAIL: mymalloc returned NULL pointer");
+    chunk2 = mymalloc(64);
+    assert(chunk2 != NULL && "FAIL: mymalloc returned NULL pointer");
+    chunk3 = mymalloc(64);
+
+    myfree(chunk1, 64);
+    myfree(chunk3, 64);
+    myfree(chunk2, 64);
+    numNodes = numNodesOnFreeList();
+    assert(numNodes == 1 && "FAIL: Number of nodes is not 1");
+
+    printf("PASS\n");
+
+
+    // Test amalgamating from behind
+    printf("\nTesting amalgamating from behind...\n");
+    chunk1 = mymalloc(64);
+    assert(chunk1 != NULL && "FAIL: mymalloc returned NULL pointer");
+    chunk2 = mymalloc(64);
+    assert(chunk2 != NULL && "FAIL: mymalloc returned NULL pointer");
+    chunk3 = mymalloc(64);
+
+    myfree(chunk2, 64);
+    myfree(chunk3, 64);
+    myfree(chunk1, 64);
+    numNodes = numNodesOnFreeList();
+    assert(numNodes == 1 && "FAIL: Number of nodes is not 1");
+
+    printf("PASS\n");
 }
