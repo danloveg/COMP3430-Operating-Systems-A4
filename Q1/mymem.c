@@ -99,25 +99,18 @@ void myfree(void *addr, unsigned long sz) {
 
   unsigned long     freeSz;
   freeListNodePtr   curr;
-  freeListNodePtr   prev;
-  freeListNodePtr   startAddr;
-  freeListNodePtr   prevNode;
-  freeListNodePtr   nextNode;
-  freeListNodePtr   newNode;
+  freeListNodePtr   prev = NULL;
+  freeListNodePtr   prevNode = NULL;
+  freeListNodePtr   nextNode = NULL;
+  freeListNodePtr   newNode = NULL;
 
   // we always free an area at least as big as a free list structure
   freeSz=max(sz,MINALLOCSIZE);
 
   // return the area of size 'freeSz' bytes to the free list
   // amalgamating the area with any adjacent free areas.
-  startAddr=(freeListNodePtr)addr;
-
   // search list for a node with an end address 1 less than startAddr
   // and for a node with a start address 1 greated than addr+freeSz
-  prevNode=NULL;
-  nextNode=NULL;
-  newNode=NULL;
-  prev=NULL;
   for (curr=freeListHead;((curr!=NULL)&&((prevNode==NULL)||
 					 (nextNode==NULL)));curr=curr->next) {
     if (((freeListNodePtr)((unsigned long)curr+curr->size))==addr) {
