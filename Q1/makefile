@@ -1,5 +1,5 @@
 CC=gcc
-FLAGS=-g -o
+FLAGS=-g -Wall -o
 EXEC=memTest
 SRCS=test.c mymem.c
 
