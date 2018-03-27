@@ -1,6 +1,6 @@
 CC=gcc
 FLAGS=-g -o
-EXEC=listTest
+EXEC=memTest
 SRCS=test.c mymem.c
 
 default:
