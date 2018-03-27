@@ -14,7 +14,7 @@ int main(int argc, char*argv[]) {
     int numNodes;
 
     // Initialize memory
-    myinit(65536);
+    myinit(257);
 
     // Test contiguous allocating and freeing of memory
     printf("Testing contiguous allocation and deallocation...\n");
@@ -86,6 +86,24 @@ int main(int argc, char*argv[]) {
     myfree(chunk2, 64);
     numNodes = numNodesOnFreeList();
     assert(numNodes == 1 && "FAIL: Number of nodes is not 1");
+
+    printf("PASS\n");
+
+
+    // Testing whether you can allocate in a freed amalgamated space
+    printf("\nTesting allocation in a freed amalgamated space...\n");
+    chunk1 = mymalloc(128);
+    assert(chunk1 != NULL && "FAIL: mymalloc returned NULL pointer");
+    chunk2 = mymalloc(64);
+    assert(chunk2 != NULL && "FAIL: mymalloc returned NULL pointer");
+    chunk3 = mymalloc(64);
+    assert(chunk3 != NULL && "FAIL: mymalloc returned NULL pointer");
+
+    myfree(chunk2, 64);
+    myfree(chunk3, 64);
+
+    chunk3 = mymalloc(128);
+    assert(chunk3 != NULL && "FAIL: mymalloc returned NULL pointer for amalgamated space");
 
     printf("PASS\n");
 }
