@@ -12,4 +12,4 @@ All of the code has only been tested on Linux (Scientific and Ubuntu) and cannot
 
 ### Question 1
 
-Running the code for Q1 applies unit tests to the memory manager written in `mymem.c`. Using a terminal, descend into the Q1 folder: `cd Q1`. Make the executable: `make`. Run the tests: `./listTest`. All of the tests should print out a PASS message.
+Running the code for Q1 applies unit tests to the memory manager written in `mymem.c`. Using a terminal, descend into the Q1 folder: `cd Q1`. Make the executable: `make`. Run the tests: `./memTest`. All of the tests should print out a PASS message.
